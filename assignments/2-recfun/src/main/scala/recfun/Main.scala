@@ -14,11 +14,11 @@ object Main {
   /**
    * Exercise 1
    */
-  def pascal(c: Int, r: Int): Int =
-    if (c == 0 || c == r) {
+  def pascal(column: Int, row: Int): Int =
+    if (column == 0 || column == row) {
       1
     } else {
-      pascal(c - 1, r - 1) + pascal(c, r - 1)
+      pascal(column - 1, row - 1) + pascal(column, row - 1)
     }
 
   /**

@@ -24,12 +24,20 @@ object Main {
   /**
    * Exercise 2
    */
-  def balance(chars: List[Char]): Boolean = chars.foldLeft(0) {
-    case (0, ')') => return false
-    case (x, ')') => x - 1
-    case (x, '(') => x + 1
-    case (x, _  ) => x
-  } == 0
+  def balance(chars: List[Char]): Boolean = {
+    def checkBalance(chars: List[Char], stack: List[Char] = List()): Boolean = {
+      if (chars.isEmpty) {
+        stack.isEmpty;
+      } else if (chars.head == '(') {
+        checkBalance(chars.tail, chars.head :: stack)
+      } else if (chars.head == ')') {
+        !stack.isEmpty && stack.head != chars.head && checkBalance(chars.tail, stack.dropRight(1))
+      } else {
+        checkBalance(chars.tail, stack)
+      }
+    }
+    checkBalance(chars);
+  }
 
   /**
    * Exercise 3

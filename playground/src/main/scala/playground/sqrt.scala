@@ -1,6 +1,6 @@
 package playground
 
-object sqrt {
+object Main {
 
   def abs(x:Double) = if (x < 0) -x else x
 

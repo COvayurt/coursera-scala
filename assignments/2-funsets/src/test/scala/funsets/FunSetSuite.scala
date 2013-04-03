@@ -77,6 +77,8 @@ class FunSetSuite extends FunSuite {
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
+    
+    val evenNumbers = ((x: Int) => x % 2 == 0)
   }
 
   /**
@@ -86,7 +88,7 @@ class FunSetSuite extends FunSuite {
    * Once you finish your implementation of "singletonSet", exchange the
    * function "ignore" by "test".
    */
-  ignore("singletonSet(1) contains 1") {
+  test("singletonSet(1) contains 1") {
     
     /**
      * We create a new instance of the "TestSets" trait, this gives us access
@@ -101,12 +103,77 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  ignore("union contains all elements") {
+  test("singletonSet(1) does not contain 2") {
+    
+    new TestSets {
+      assert(!contains(s1, 2), "Singleton")
+    }
+  }
+
+  test("singletonSet(2) contains 2") {
+    
+    new TestSets {
+      assert(contains(s2, 2), "Singleton")
+    }
+  }
+  
+  test("singletonSet(3) contains 3") {
+    
+    new TestSets {
+      assert(contains(s3, 3), "Singleton")
+    }
+  }
+
+  test("union contains all elements") {
     new TestSets {
       val s = union(s1, s2)
       assert(contains(s, 1), "Union 1")
       assert(contains(s, 2), "Union 2")
       assert(!contains(s, 3), "Union 3")
+    }
+  }
+  
+  test("intersect contains no elements") {
+    new TestSets {
+      val s = intersect(s1, s2)
+      assert(!contains(s, 1), "Union 1")
+      assert(!contains(s, 2), "Union 2")
+      assert(!contains(s, 3), "Union 3")
+    }
+  }
+  
+  test("filter filters the set correctly") {
+    new TestSets {
+      val s = filter(evenNumbers, (x => x > 2 && x < 6))
+      
+      assert(!contains(s, 2), "Filter 2")
+      assert(contains(s, 4),  "Filter 4")
+      assert(!contains(s, 6), "Filter 6")
+    }
+  }
+
+  test("forall works correctly") {
+    new TestSets {
+      assert(forall(evenNumbers, (x => x % 2 == 0)), "Forall 1")
+      assert(!forall(evenNumbers, (x => x % 2 == 1)), "Forall 2")
+    }
+  }
+
+  test("exists works correctly") {
+    new TestSets {
+      assert(exists(evenNumbers, (x => x == -1000)), "Exists -1000")
+      assert(exists(evenNumbers, (x => x == 2)), "Exists 2")
+      assert(!exists(evenNumbers, (x => x == 3)), "Exists 3")
+      assert(!exists(evenNumbers, (x => x == 12345)), "Exists 12345")
+    }
+  }
+  
+  test("map works correctly") {
+    new TestSets {
+      val mapped = map(s1, (x => x + 1))
+
+      assert(!contains(mapped, 1), "Map 1")
+      assert(contains(mapped, 2), "Map 2")
     }
   }
 }

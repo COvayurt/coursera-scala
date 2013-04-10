@@ -67,6 +67,7 @@ abstract class TweetSet {
    * and be implemented in the subclasses?
    */
   def mostRetweeted: Tweet
+  def mostRetweetedAcc(acc: Tweet): Tweet
 
   /**
    * Returns a list containing all tweets of this set, sorted by retweet count
@@ -78,7 +79,6 @@ abstract class TweetSet {
    * and be implemented in the subclasses?
    */
   def descendingByRetweet: TweetList
-
 
   /**
    * The following methods are already implemented
@@ -115,6 +115,7 @@ class Empty extends TweetSet {
   def union(that: TweetSet): TweetSet = that
 
   def mostRetweeted: Tweet = throw new NoSuchElementException("Empty.mostRetweeted")
+  def mostRetweetedAcc(acc: Tweet) = acc
 
   def descendingByRetweet: TweetList = Nil
 
@@ -141,10 +142,15 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     that.union(left).union(right).incl(elem)
   }
 
-  def mostRetweeted: Tweet = elem
+  def mostRetweeted: Tweet = {
+    mostRetweetedAcc(elem)
+  }
+  def mostRetweetedAcc(acc: Tweet): Tweet = {
+    left.union(right).mostRetweetedAcc(if (elem.retweets > acc.retweets) elem else acc)
+  }
 
   def descendingByRetweet: TweetList = {
-    Nil
+    new Cons(mostRetweeted, remove(mostRetweeted).descendingByRetweet)
   }
 
   /**

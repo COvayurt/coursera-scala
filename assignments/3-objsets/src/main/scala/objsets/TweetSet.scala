@@ -146,7 +146,7 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     mostRetweetedAcc(elem)
   }
   def mostRetweetedAcc(acc: Tweet): Tweet = {
-    left.union(right).mostRetweetedAcc(if (elem.retweets > acc.retweets) elem else acc)
+    right.mostRetweetedAcc(left.mostRetweetedAcc(if (elem.retweets > acc.retweets) elem else acc))
   }
 
   def descendingByRetweet: TweetList = {

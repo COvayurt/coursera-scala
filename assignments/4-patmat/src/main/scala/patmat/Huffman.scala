@@ -101,8 +101,8 @@ object Huffman {
    * Checks whether the list `trees` contains only one single code tree.
    */
   def singleton(trees: List[CodeTree]): Boolean = trees match {
-    case tree :: Nil => true
-    case _           => false
+    case _ :: Nil => true
+    case _        => false
   }
 
   /**

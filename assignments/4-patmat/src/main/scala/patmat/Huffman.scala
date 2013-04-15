@@ -139,7 +139,10 @@ object Huffman {
    *    the example invocation. Also define the return type of the `until` function.
    *  - try to find sensible parameter names for `xxx`, `yyy` and `zzz`.
    */
-  def until(xxx: ???, yyy: ???)(zzz: ???): ??? = ???
+  def until(breaker: List[CodeTree] => Boolean, combiner: List[CodeTree] => List[CodeTree])(trees: List[CodeTree]): CodeTree = singleton(trees) match {
+    case true  => trees(0)
+    case false => until(breaker, combiner)(combiner(trees))
+  }
 
   /**
    * This function creates a code tree which is optimal to encode the text `chars`.

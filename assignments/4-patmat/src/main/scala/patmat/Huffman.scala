@@ -77,7 +77,14 @@ object Huffman {
    *       println("integer is  : "+ theInt)
    *   }
    */
-  def times(chars: List[Char]): List[(Char, Int)] = ???
+  def times(chars: List[Char]): List[(Char, Int)] = {
+    def occurences(chars: List[Char], acc: Map[Char, Int]): Map[Char, Int] = chars match {
+      case List()       => acc
+      case char :: tail => occurences(tail, acc.updated(char, acc.withDefault(key => 0)(char) + 1))
+    }
+    occurences(chars, Map[Char, Int]()).toList
+  }
+    
 
   /**
    * Returns a list of `Leaf` nodes for a given frequency table `freqs`.

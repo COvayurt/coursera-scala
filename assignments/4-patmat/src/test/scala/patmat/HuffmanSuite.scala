@@ -26,6 +26,12 @@ class HuffmanSuite extends FunSuite {
     }
   }
 
+  test("occurences of char in list") {
+    new TestTrees {
+      assert(times(List('a','b','c','d','a','b','c','a','b','a')) == List(('a',4),('b',3),('c',2),('d',1)))
+    }
+  }
+
   test("string2chars(\"hello, world\")") {
     assert(string2Chars("hello, world") === List('h', 'e', 'l', 'l', 'o', ',', ' ', 'w', 'o', 'r', 'l', 'd'))
   }

@@ -48,7 +48,7 @@ class HuffmanSuite extends FunSuite {
   }
 
   test("decode the french secret") {
-    assert(decodedSecret === List())
+    assert(decodedSecret === List('h','u','f','f','m','a','n','e','s','t','c','o','o','l'))
   }
 
   test("decode and encode a very short text should be identity") {

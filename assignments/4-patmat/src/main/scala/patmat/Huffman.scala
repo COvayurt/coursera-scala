@@ -93,9 +93,8 @@ object Huffman {
    * head of the list should have the smallest weight), where the weight
    * of a leaf is the frequency of the character.
    */
-  def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = {
-    freqs.map(pair => Leaf(pair._1, pair._2)).sortBy(l => l.weight)
-  }
+  def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] =
+    freqs.sortBy(pair => pair._2).map(pair => Leaf(pair._1, pair._2))
 
   /**
    * Checks whether the list `trees` contains only one single code tree.
@@ -118,8 +117,11 @@ object Huffman {
    * unchanged.
    */
   def combine(trees: List[CodeTree]): List[CodeTree] = trees match {
-    case lowest :: secondLowest :: tail => makeCodeTree(lowest, secondLowest) :: tail
-    case _                              => trees
+    case lowest :: secondLowest :: tail => {
+      val newTree = makeCodeTree(lowest, secondLowest)
+      tail.filter(tree => weight(tree) <= weight(newTree)) ::: newTree :: tail.filter(tree => weight(tree) > weight(newTree))
+    }
+    case _ => trees
   }
 
   /**
@@ -151,9 +153,7 @@ object Huffman {
    * frequencies from that text and creates a code tree based on them.
    */
   def createCodeTree(chars: List[Char]): CodeTree =
-    until(singleton, combine)(times(chars).map(pair => Leaf(pair._1, pair._2)))
-
-
+    until(singleton, combine)(makeOrderedLeafList(times(chars)))
 
   // Part 3: Decoding
 
@@ -164,7 +164,6 @@ object Huffman {
    * the resulting list of characters.
    */
   def decode(tree: CodeTree, bits: List[Bit]): List[Char] = ???
-
   /**
    * A Huffman coding tree for the French language.
    * Generated from the data given at
@@ -181,7 +180,7 @@ object Huffman {
   /**
    * Write a function that returns the decoded secret
    */
-  def decodedSecret: List[Char] = ???
+  def decodedSecret: List[Char] = decode(frenchCode, secret)
 
 
 

@@ -27,13 +27,15 @@ class HuffmanSuite extends FunSuite {
   }
 
   test("occurences of char in list") {
-    new TestTrees {
-      assert(times(List('a','b','c','d','a','b','c','a','b','a')) == List(('a',4),('b',3),('c',2),('d',1)))
-    }
+    assert(times(List('a','b','c','d','a','b','c','a','b','a')) == List(('a',4),('b',3),('c',2),('d',1)))
   }
 
   test("string2chars(\"hello, world\")") {
     assert(string2Chars("hello, world") === List('h', 'e', 'l', 'l', 'o', ',', ' ', 'w', 'o', 'r', 'l', 'd'))
+  }
+
+  test("createCodeTree creates the correct tree") {
+    assert(createCodeTree(List('a','b','c','a','b','a')) === makeCodeTree(Leaf('a',3), makeCodeTree(Leaf('c',1), Leaf('b',2))));
   }
 
   test("makeOrderedLeafList for some frequency table") {
@@ -43,6 +45,10 @@ class HuffmanSuite extends FunSuite {
   test("combine of some leaf list") {
     val leaflist = List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 4))
     assert(combine(leaflist) === List(Fork(Leaf('e',1),Leaf('t',2),List('e', 't'),3), Leaf('x',4)))
+  }
+
+  test("decode the french secret") {
+    assert(decodedSecret === List())
   }
 
   test("decode and encode a very short text should be identity") {

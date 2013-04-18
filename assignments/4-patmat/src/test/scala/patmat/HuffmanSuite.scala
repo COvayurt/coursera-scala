@@ -56,4 +56,20 @@ class HuffmanSuite extends FunSuite {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
+
+  trait CodeTable {
+    val t1 = List(('a',List(0,1,0)), ('b',List(1,1,1)), ('c',List(0,0,0)))
+  }
+  
+  test("codeBits with a hit") {
+    new CodeTable {
+      assert(codeBits(t1)('a') === List(0,1,0))
+    }
+  }
+  
+  test("codeBits without a hit") {
+    new CodeTable {
+      assert(codeBits(t1)('d') === List())
+    }
+  }
 }

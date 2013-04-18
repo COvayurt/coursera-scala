@@ -72,4 +72,10 @@ class HuffmanSuite extends FunSuite {
       assert(codeBits(t1)('d') === List())
     }
   }
+
+  test("quick-encode and decode a text should be identity") {
+    val text = "Die Aufgabe wurde geloest"
+    val tree = createCodeTree(text.toList)
+    assert(decode(tree, quickEncode(tree)(text.toList)) === text.toList)
+  }
 }

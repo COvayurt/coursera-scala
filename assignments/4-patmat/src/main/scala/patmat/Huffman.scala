@@ -205,18 +205,16 @@ object Huffman {
    * into a sequence of bits.
    */
   def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
-    def innerEncode(innerTree: CodeTree, text: List[Char], acc: List[Bit]): List[Bit] = innerTree match {
-      case Leaf(char, _)           => text match {
-        case List() => acc
-        case _      => innerEncode(tree, text, acc)
-      }
-      case Fork(left, right, _, _) => if (chars(left).contains(text.head)) {
-          innerEncode(left, text.tail, 0 :: acc)
+    def innerEncode(innerTree: CodeTree, char:Char, acc: List[Bit]): List[Bit] = innerTree match {
+      case Leaf(_, _)              => acc
+      case Fork(left, right, _, _) =>
+        if (chars(left).contains(char)) {
+          innerEncode(left, char, acc ::: List(0))
         } else {
-          innerEncode(right, text.tail, 1 :: acc)
+          innerEncode(right, char, acc ::: List(1))
         }
     }
-    innerEncode(tree, text, List()).reverse
+    text.flatMap(char => innerEncode(tree, char, List[Bit]()))
   }
 
   // Part 4b: Encoding using code table
@@ -240,14 +238,17 @@ object Huffman {
    * a valid code tree that can be represented as a code table. Using the code tables of the
    * sub-trees, think of how to build the code table for the entire tree.
    */
-  def convert(tree: CodeTree): CodeTable = ???
+  def convert(tree: CodeTree): CodeTable = {
+    val acc: CodeTable = List()
+    chars(tree).foldLeft(acc)((acc, char) => (char, encode(tree)(List(char))) :: acc)
+  }
 
   /**
    * This function takes two code tables and merges them into one. Depending on how you
    * use it in the `convert` method above, this merge method might also do some transformations
    * on the two parameter code tables.
    */
-  def mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = ???
+  def mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = a ++ b
 
   /**
    * This function encodes `text` according to the code tree `tree`.
@@ -255,5 +256,7 @@ object Huffman {
    * To speed up the encoding process, it first converts the code tree to a code table
    * and then uses it to perform the actual encoding.
    */
-  def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+    text.flatMap(codeBits(convert(tree)))
+  }
 }

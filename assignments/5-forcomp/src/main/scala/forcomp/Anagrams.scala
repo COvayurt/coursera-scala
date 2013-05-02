@@ -81,12 +81,13 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] =
-    for {
-      (char, count) <- occurrences
-      counter       <- 1 to count
+  def combinations(occurrences: Occurrences): List[Occurrences] = occurrences match {
+    case List()                => List(List())
+    case (char, 0) :: tail     => combinations(tail)
+    case (char, count) :: tail => {
+      (for (c <- 1 to count) yield List((char, c))).toList ::: combinations(tail)
     }
-      yield List((char, counter))
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    * 

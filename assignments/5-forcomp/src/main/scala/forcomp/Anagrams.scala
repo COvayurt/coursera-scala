@@ -142,8 +142,19 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = sentence match {
-    case List() => List(List())
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    def anagrams(occurences: Occurrences): List[Sentence] = occurences match {
+      case List() => List(List())
+      case _      => {
+        for {
+	        combination <- combinations(occurences)
+          if (dictionaryByOccurrences.contains(combination))
+          word        <- dictionaryByOccurrences(combination)
+          rest        <- anagrams(subtract(occurences, combination))
+        } yield word :: rest
+      }
+    }
+    anagrams(sentenceOccurrences(sentence))
   }
 
 }

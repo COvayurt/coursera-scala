@@ -100,7 +100,7 @@ object Anagrams {
    */
   def subtract(x: Occurrences, y: Occurrences): Occurrences = x.toMap.foldLeft(Map[Char, Int]())((acc, pair) => {
     acc.updated(pair._1, pair._2 - y.toMap.withDefaultValue(0)(pair._1))
-  }).filter(pair => pair._2 > 0).toList
+  }).filter(pair => pair._2 > 0).toList.sortBy(pair => pair._1)
 
   /** Returns a list of all anagram sentences of the given sentence.
    *  
